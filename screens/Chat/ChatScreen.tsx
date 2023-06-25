@@ -1,13 +1,8 @@
 import { useEffect, useState } from "react";
-import { FlatList, Keyboard, KeyboardAvoidingView, Pressable, Text, TextInput, TouchableWithoutFeedback, View } from "react-native";
+import { FlatList, Keyboard, KeyboardAvoidingView, Pressable, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from "react-native";
 import MessageComponent from "./Components/Message.Component";
 import React from "react";
-import { RootScreenProps, RootStackParamList } from "../../type";
-
-// interface ChatScreenProps {
-//     navigation: NativeStackNavigationProp<RootStackParamList, "Chat">;
-//     route: RouteProp<RootStackParamList, "Chat">
-// }
+import { RootScreenProps } from "../../type";
 
 const ChatScreen: React.FC<RootScreenProps<'Chat'>> = ({navigation, route}) => {
     const [username, setUserName] = React.useState((Math.random() + 1).toString(36).substring(7));
@@ -111,49 +106,55 @@ const ChatScreen: React.FC<RootScreenProps<'Chat'>> = ({navigation, route}) => {
     }
   
     return (
-      <KeyboardAvoidingView
-        className="bg-neutral-300 dark:bg-slate-900 h-full"
-        behavior="height"
-      >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View className='m-3 mb-16 flex flex-col'>
-            <View 
-              className='basis-11/12'
-            >
-                {chatMessages[0] ? (
-                    <FlatList
-                        data={chatMessages}
-                        renderItem={({ item }) => (
-                            <MessageComponent item={item} username={username} />
-                        )}
-                        keyExtractor={item => item.id}
-                        nestedScrollEnabled={true}
-                    />
-                ) : (
-                    ""
-                )}
-            </View>
-  
-            <View className="basis-1/12 flex flex-row items-center">
-                <TextInput
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-4/5 px-2.5 py-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder='Say hi!'
-                  value={messageText}
-                  onChangeText={setMessageText}
-                />
-                <Pressable
-                  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 flex flex-row justify-center font-medium ml-1 rounded-lg text-sm w-1/5 sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                  onPress={submitMessage}
+        <KeyboardAvoidingView 
+            style={{flex: 1}}
+            contentContainerStyle={{ flex: 1}}
+        >
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View className='m-3 flex flex-col' style={{flex: 1}}>
+                <View 
+                style={{flex: 0.9}}
                 >
-                    <View>
-                        <Text className="text-white">Send</Text>
-                    </View>
-                </Pressable>
+                    {chatMessages[0] ? (
+                        <FlatList
+                            data={chatMessages}
+                            renderItem={({ item }) => (
+                                <MessageComponent item={item} username={username} />
+                            )}
+                            keyExtractor={item => item.id}
+                            contentContainerStyle={{ flex: 1}}
+                        />
+                    ) : (
+                        ""
+                    )}
+                </View>
+    
+                <View className="flex flex-row items-center" style={{flex: 0.1}}>
+                    <TextInput
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-4/5 px-2.5 py-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder='Say hi!'
+                    value={messageText}
+                    onChangeText={setMessageText}
+                    />
+                    <Pressable
+                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 flex flex-row justify-center font-medium ml-1 rounded-lg text-sm w-1/5 sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    onPress={submitMessage}
+                    >
+                        <View>
+                            <Text className="text-white">Send</Text>
+                        </View>
+                    </Pressable>
+                </View>
             </View>
-        </View>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+            </TouchableWithoutFeedback>
+        </KeyboardAvoidingView >
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+    }
+});
 
 export default ChatScreen;
